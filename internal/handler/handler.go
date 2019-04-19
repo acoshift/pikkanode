@@ -33,7 +33,6 @@ func New() http.Handler {
 
 	mux.Handle("/picture/get", arpc.Handler(picture.Get))
 	mux.Handle("/picture/favorite", arpc.Handler(picture.Favorite))
-	mux.Handle("/picture/unFavorite", arpc.Handler(picture.UnFavorite))
 	mux.Handle("/picture/comment", arpc.Handler(picture.Comment))
 
 	return middleware.Chain(

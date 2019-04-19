@@ -114,7 +114,8 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 }
 
 type FavoriteRequest struct {
-	ID string `json:"id"`
+	ID       string `json:"id"`
+	Favorite bool   `json:"favorite"`
 }
 
 func (req *FavoriteRequest) Valid() error {
@@ -139,56 +140,30 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 	}
 
 	var r struct{}
-	// language=SQL
-	_, err := pgctx.Exec(ctx, `
+
+	if req.Favorite {
+		// language=SQL
+		_, err := pgctx.Exec(ctx, `
 		insert into favorites
 			(user_id, picture_id)
 		values
 			($1, $2)
 		on conflict do nothing
 	`, userID, req.ID)
-	if pgsql.IsForeignKeyViolation(err, "favorites_picture_id_fkey") {
-		return nil, errPictureNotFound
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	return &r, nil
-}
-
-type UnFavoriteRequest struct {
-	ID string `json:"id"`
-}
-
-func (req *UnFavoriteRequest) Valid() error {
-	v := validator.New()
-	v.Must(req.ID != "", "id required")
-	if req.ID != "" {
-		id, err := strconv.ParseInt(req.ID, 10, 64)
-		if err != nil {
-			v.Add(errors.New("invalid id"))
-		} else {
-			v.Must(id > 0, "id required")
+		if pgsql.IsForeignKeyViolation(err, "favorites_picture_id_fkey") {
+			return nil, errPictureNotFound
 		}
-	}
-
-	return v.Error()
-}
-
-func UnFavorite(ctx context.Context, req *UnFavoriteRequest) (*struct{}, error) {
-	userID := session.GetUserID(ctx)
-	if userID == "" {
-		return nil, errInvalidCredentials
-	}
-
-	var r struct{}
-	// language=SQL
-	_, err := pgctx.Exec(ctx, `
-		delete from favorites where user_id = $1 and picture_id = $2
-	`, userID, req.ID)
-	if err != nil {
-		return nil, err
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// language=SQL
+		_, err := pgctx.Exec(ctx, `
+			delete from favorites where user_id = $1 and picture_id = $2
+		`, userID, req.ID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &r, nil
@@ -211,7 +186,7 @@ func (req *CommentRequest) Valid() error {
 		}
 	}
 	v.Must(req.Content != "", "content required")
-	v.Must(utf8.RuneCountInString(req.Content) <= 255, "content length must not more than 255 charactors")
+	v.Must(utf8.RuneCountInString(req.Content) <= 255, "content length maximum 255 charactors")
 
 	return v.Error()
 }

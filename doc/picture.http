@@ -15,18 +15,8 @@ POST http://localhost:8080/picture/favorite
 Content-Type: application/json
 
 {
-	"id": "1"
-}
-
-###
-
-# Un Favorite Picture
-
-POST http://localhost:8080/picture/unFavorite
-Content-Type: application/json
-
-{
-  "id": "1"
+	"id": "1",
+	"favorite": true
 }
 
 ###
