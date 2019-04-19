@@ -12,6 +12,7 @@ import (
 	"github.com/acoshift/pgsql/pgctx"
 	"github.com/lib/pq"
 
+	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/session"
 	"github.com/acoshift/pikkanode/internal/validator"
 )
@@ -40,19 +41,19 @@ type CommentItem struct {
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"createdAt"`
 	User      struct {
-		Username string `json:"username"`
-		Photo    string `json:"photo"`
+		Username string           `json:"username"`
+		Photo    file.DownloadURL `json:"photo"`
 	} `json:"user"`
 }
 
 type GetResult struct {
-	ID        string         `json:"id"`
-	Name      string         `json:"name"`
-	Detail    string         `json:"detail"`
-	Photo     string         `json:"photo"`
-	Tags      []string       `json:"tags"`
-	Comments  []*CommentItem `json:"comments"`
-	CreatedAt time.Time      `json:"createdAt"`
+	ID        string           `json:"id"`
+	Name      string           `json:"name"`
+	Detail    string           `json:"detail"`
+	Photo     file.DownloadURL `json:"photo"`
+	Tags      []string         `json:"tags"`
+	Comments  []*CommentItem   `json:"comments"`
+	CreatedAt time.Time        `json:"createdAt"`
 }
 
 func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
