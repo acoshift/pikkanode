@@ -11,6 +11,7 @@ import (
 
 	"github.com/acoshift/arpc"
 	"github.com/acoshift/pgsql/pgctx"
+	"github.com/asaskevich/govalidator"
 
 	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/image"
@@ -117,6 +118,47 @@ func UploadProfilePhoto(ctx context.Context, req *UploadProfilePhotoRequest) (*s
 	}
 
 	err = setUserPhoto(ctx, userID, fn)
+	if err != nil {
+		return nil, err
+	}
+
+	return new(struct{}), nil
+}
+
+type RemovePictureRequest struct {
+	ID string `json:"id"`
+}
+
+func (req *RemovePictureRequest) Valid() error {
+	v := validator.New()
+	v.Must(req.ID != "", "id required")
+	v.Must(govalidator.IsNumeric(req.ID), "invalid id")
+
+	return v.Error()
+}
+
+func RemovePicture(ctx context.Context, req *RemovePictureRequest) (*struct{}, error) {
+	userID := session.GetUserID(ctx)
+	if userID == "" {
+		return nil, errInvalidCredentials
+	}
+
+	err := pgctx.RunInTx(ctx, func(ctx context.Context) error {
+		// language=SQL
+		_, err := pgctx.Exec(ctx, `
+			delete from pictures where user_id = $1 and id = $2
+		`, userID, req.ID)
+		if err != nil {
+			return err
+		}
+
+		// language=SQL
+		_, err = pgctx.Exec(ctx, `
+			delete from comments where picture_id = $1
+		`, req.ID)
+
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}

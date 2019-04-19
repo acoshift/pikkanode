@@ -27,6 +27,7 @@ func New() http.Handler {
 
 	mux.Handle("/me/profile", arpc.Handler(me.Profile))
 	mux.Handle("/me/uploadProfilePhoto", arpc.Handler(me.UploadProfilePhoto))
+	mux.Handle("/me/removePicture", arpc.Handler(me.RemovePicture))
 
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
 	mux.Handle("/user/follow", arpc.Handler(user.Follow))
