@@ -78,3 +78,18 @@ IMAGE_DATA
 ------b--
 
 ###
+
+# Update Work
+
+POST http://localhost:8080/me/updateWork
+Content-Type: application/json
+Cookie: {{auth_cookie}}
+
+{
+  "id": "1",
+  "name": "test",
+  "detail": "hello",
+  "tags": ["a", "b"]
+}
+
+###
