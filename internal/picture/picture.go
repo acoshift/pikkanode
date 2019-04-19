@@ -3,13 +3,12 @@ package picture
 import (
 	"context"
 	"database/sql"
-	"errors"
-	"strconv"
 	"time"
 	"unicode/utf8"
 
 	"github.com/acoshift/pgsql"
 	"github.com/acoshift/pgsql/pgctx"
+	"github.com/asaskevich/govalidator"
 	"github.com/lib/pq"
 
 	"github.com/acoshift/pikkanode/internal/file"
@@ -24,14 +23,7 @@ type GetRequest struct {
 func (req *GetRequest) Valid() error {
 	v := validator.New()
 	v.Must(req.ID != "", "id required")
-	if req.ID != "" {
-		id, err := strconv.ParseInt(req.ID, 10, 64)
-		if err != nil {
-			v.Add(errors.New("invalid id"))
-		} else {
-			v.Must(id > 0, "id required")
-		}
-	}
+	v.Must(govalidator.IsNumeric(req.ID), "invalid id")
 
 	return v.Error()
 }
@@ -75,7 +67,6 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 		if err != nil {
 			return nil, err
 		}
-
 	}
 
 	{
@@ -109,6 +100,8 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 		if err := rows.Err(); err != nil {
 			return nil, err
 		}
+
+		rows.Close()
 	}
 
 	return &r, nil
@@ -122,14 +115,7 @@ type FavoriteRequest struct {
 func (req *FavoriteRequest) Valid() error {
 	v := validator.New()
 	v.Must(req.ID != "", "id required")
-	if req.ID != "" {
-		id, err := strconv.ParseInt(req.ID, 10, 64)
-		if err != nil {
-			v.Add(errors.New("invalid id"))
-		} else {
-			v.Must(id > 0, "id required")
-		}
-	}
+	v.Must(govalidator.IsNumeric(req.ID), "invalid id")
 
 	return v.Error()
 }
@@ -139,8 +125,6 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 	if userID == "" {
 		return nil, errInvalidCredentials
 	}
-
-	var r struct{}
 
 	if req.Favorite {
 		// language=SQL
@@ -167,45 +151,37 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 		}
 	}
 
-	return &r, nil
+	return new(struct{}), nil
 }
 
 type CommentRequest struct {
-	PictureID string `json:"pictureId"`
-	Content   string `json:"content"`
+	ID      string `json:"id"`
+	Content string `json:"content"`
 }
 
 func (req *CommentRequest) Valid() error {
 	v := validator.New()
-	v.Must(req.PictureID != "", "pictureId required")
-	if req.PictureID != "" {
-		id, err := strconv.ParseInt(req.PictureID, 10, 64)
-		if err != nil {
-			v.Add(errors.New("invalid picture id"))
-		} else {
-			v.Must(id > 0, "pictureId required")
-		}
-	}
+	v.Must(req.ID != "", "id required")
+	v.Must(govalidator.IsNumeric(req.ID), "invalid id")
 	v.Must(req.Content != "", "content required")
-	v.Must(utf8.RuneCountInString(req.Content) <= 255, "content length maximum 255 charactors")
+	v.Must(utf8.RuneCountInString(req.Content) <= 255, "content length maximum 255 characters")
 
 	return v.Error()
 }
 
-func Comment(ctx context.Context, req *CommentRequest) (*struct{}, error) {
+func PostComment(ctx context.Context, req *CommentRequest) (*struct{}, error) {
 	userID := session.GetUserID(ctx)
 	if userID == "" {
 		return nil, errInvalidCredentials
 	}
 
-	var r struct{}
 	// language=SQL
 	_, err := pgctx.Exec(ctx, `
 		insert into comments
 			(user_id, picture_id, content)
 		values
 			($1, $2, $3)
-	`, userID, req.PictureID, req.Content)
+	`, userID, req.ID, req.Content)
 	if pgsql.IsForeignKeyViolation(err, "comments_picture_id_fkey") {
 		return nil, errPictureNotFound
 	}
@@ -213,5 +189,5 @@ func Comment(ctx context.Context, req *CommentRequest) (*struct{}, error) {
 		return nil, err
 	}
 
-	return &r, nil
+	return new(struct{}), nil
 }

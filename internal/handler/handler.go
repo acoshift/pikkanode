@@ -19,6 +19,8 @@ import (
 func New() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/", arpc.NotFoundHandler())
+	mux.Handle(file.BasePath+"/", http.StripPrefix(file.BasePath, file.Handler()))
+
 	mux.Handle("/auth/signUp", arpc.Handler(auth.SignUp))
 	mux.Handle("/auth/signIn", arpc.Handler(auth.SignIn))
 	mux.Handle("/auth/signOut", arpc.Handler(auth.SignOut))
@@ -29,11 +31,9 @@ func New() http.Handler {
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
 	mux.Handle("/user/follow", arpc.Handler(user.Follow))
 
-	mux.Handle(file.BasePath+"/", http.StripPrefix(file.BasePath, file.Handler()))
-
 	mux.Handle("/picture/get", arpc.Handler(picture.Get))
 	mux.Handle("/picture/favorite", arpc.Handler(picture.Favorite))
-	mux.Handle("/picture/comment", arpc.Handler(picture.Comment))
+	mux.Handle("/picture/postComment", arpc.Handler(picture.PostComment))
 
 	return middleware.Chain(
 		session.Middleware(),
