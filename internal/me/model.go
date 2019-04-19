@@ -36,3 +36,23 @@ func insertWorkPhoto(ctx context.Context, x *insertWorkPhotoParam) (id int64, er
 	`, x.UserID, x.Name, x.Detail, x.Photo, pq.Array(x.Tags)).Scan(&id)
 	return
 }
+
+type updateWorkParam struct {
+	ID     string
+	Name   string
+	Detail string
+	Tags   []string
+}
+
+func updateWork(ctx context.Context, x *updateWorkParam) error {
+	// language=SQL
+	_, err := pgctx.Exec(ctx, `
+		update works
+		set
+			name = $2,
+			detail = $3,
+			tags = $4
+		where id = $1
+	`, x.ID, x.Name, x.Detail, pq.Array(x.Tags))
+	return err
+}

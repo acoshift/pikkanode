@@ -2,6 +2,7 @@ package validator
 
 import (
 	"net/http"
+	"regexp"
 
 	"github.com/acoshift/arpc"
 	"github.com/moonrhythm/validator"
@@ -21,4 +22,10 @@ func (v *Validator) Error() error {
 		return arpc.NewError(http.StatusBadRequest, err.Error())
 	}
 	return nil
+}
+
+var rxTag = regexp.MustCompile(`^[\w\-]+$`)
+
+func IsTag(str string) bool {
+	return rxTag.MatchString(str)
 }

@@ -8,4 +8,5 @@ import (
 
 var (
 	errInvalidCredentials = arpc.NewError(http.StatusUnauthorized, "invalid credentials")
+	errWorkNotFound       = arpc.NewError(http.StatusBadRequest, "work not found")
 )

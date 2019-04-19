@@ -15,7 +15,7 @@
 - [x] Upload profile photo
 - [x] Posting new works
 - [x] Delete my uploaded works
-- [ ] Update my work detail (Can not update image)
+- [x] Update my work detail (Can not update image)
 - [x] Get my works
 - [x] Get my favorited works
 

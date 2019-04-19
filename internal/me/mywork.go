@@ -3,9 +3,9 @@ package me
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"mime/multipart"
 	"strconv"
-	"strings"
 	"time"
 	"unicode/utf8"
 
@@ -212,9 +212,7 @@ func (req *CreateWorkRequest) UnmarshalMultipartForm(v *multipart.Form) error {
 	if p := v.Value["detail"]; len(p) == 1 {
 		req.Detail = p[0]
 	}
-	if p := v.Value["tags"]; len(p) == 1 {
-		req.Tags = strings.Split(p[0], ",")
-	}
+	req.Tags = v.Value["tags"]
 
 	fp := v.File["photo"]
 	if len(fp) == 1 {
@@ -231,6 +229,9 @@ func (req *CreateWorkRequest) Valid() error {
 	v.Must(utf8.RuneCountInString(req.Detail) <= 1024, "name maximum 1024 characters")
 	v.Must(req.Photo != nil, "photo required")
 	v.Must(image.Valid(req.Photo), "invalid photo")
+	for i, t := range req.Tags {
+		v.Must(validator.IsTag(t), fmt.Sprintf("tags[%d] is not valid tag", i))
+	}
 
 	return v.Error()
 }
@@ -274,6 +275,7 @@ func CreateWork(ctx context.Context, req *CreateWorkRequest) (*CreateWorkResult,
 		return nil, err
 	}
 
+	req.Tags = append([]string{}, req.Tags...)
 	id, err := insertWorkPhoto(ctx, &insertWorkPhotoParam{
 		UserID: userID,
 		Name:   req.Name,
@@ -292,4 +294,66 @@ func CreateWork(ctx context.Context, req *CreateWorkRequest) (*CreateWorkResult,
 	r.Photo = file.DownloadURL(fn)
 	r.Tags = req.Tags
 	return &r, nil
+}
+
+type UpdateWorkRequest struct {
+	ID     string
+	Name   string
+	Detail string
+	Tags   []string
+}
+
+func (req *UpdateWorkRequest) Valid() error {
+	v := validator.New()
+	v.Must(req.ID != "", "id required")
+	v.Must(govalidator.IsNumeric(req.ID), "invalid id")
+	v.Must(req.Name != "", "name required")
+	v.Must(utf8.RuneCountInString(req.Name) <= 128, "name maximum 128 characters")
+	v.Must(utf8.RuneCountInString(req.Detail) <= 1024, "name maximum 1024 characters")
+	for i, t := range req.Tags {
+		v.Must(validator.IsTag(t), fmt.Sprintf("tags[%d] is not valid tag", i))
+	}
+
+	return v.Error()
+}
+
+func UpdateWork(ctx context.Context, req *UpdateWorkRequest) (*struct{}, error) {
+	userID := session.GetUserID(ctx)
+	if userID == "" {
+		return nil, errInvalidCredentials
+	}
+
+	{
+		isExists := false
+		// language=SQL
+		err := pgctx.QueryRow(ctx, `
+			select exists(
+				select 1
+				from works
+				where user_id = $1 and id = $2
+			)
+		`, userID, req.ID).Scan(&isExists)
+		if err != nil {
+			return nil, err
+		}
+
+		if !isExists {
+			return nil, errWorkNotFound
+		}
+	}
+
+	{
+		req.Tags = append([]string{}, req.Tags...)
+		err := updateWork(ctx, &updateWorkParam{
+			ID:     req.ID,
+			Name:   req.Name,
+			Detail: req.Detail,
+			Tags:   req.Tags,
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return new(struct{}), nil
 }
