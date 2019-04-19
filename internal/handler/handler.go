@@ -26,6 +26,7 @@ func New() http.Handler {
 	mux.Handle("/me/uploadProfilePhoto", arpc.Handler(me.UploadProfilePhoto))
 
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
+	mux.Handle("/user/follow", arpc.Handler(user.Follow))
 
 	mux.Handle("/file/", http.StripPrefix("/file", file.Handler()))
 

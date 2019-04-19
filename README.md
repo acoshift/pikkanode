@@ -23,7 +23,7 @@
 
 - [x] Get user public profile
 - [ ] Get user public uploaded pictures
-- [ ] Follow user
+- [x] Follow user
 
 ### Picture
 
