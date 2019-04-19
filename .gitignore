@@ -4,5 +4,4 @@
 .vscode
 *.tmp
 *.log
-/config
 .goreload
