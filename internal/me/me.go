@@ -29,8 +29,8 @@ func (*ProfileRequest) AdaptRequest(r *http.Request) {
 }
 
 type ProfileResult struct {
-	Username string `json:"username"`
-	Photo    string `json:"photo"`
+	Username string           `json:"username"`
+	Photo    file.DownloadURL `json:"photo"`
 }
 
 func Profile(ctx context.Context, _ *ProfileRequest) (*ProfileResult, error) {

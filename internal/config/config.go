@@ -68,3 +68,7 @@ func StorageClient() *storage.Client {
 func Dev() bool {
 	return config.Bool("dev")
 }
+
+func BaseURL() string {
+	return config.String("base_url")
+}

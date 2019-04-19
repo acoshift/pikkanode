@@ -10,6 +10,7 @@ import (
 	"github.com/acoshift/arpc"
 	"github.com/acoshift/pgsql/pgctx"
 
+	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/session"
 	"github.com/acoshift/pikkanode/internal/validator"
 )
@@ -46,9 +47,10 @@ func (req *ProfileRequest) Valid() error {
 }
 
 type ProfileResult struct {
-	Username  string `json:"username"`
-	Following bool   `json:"following"`
-	Follower  bool   `json:"follower"`
+	Username  string           `json:"username"`
+	Photo     file.DownloadURL `json:"photo"`
+	Following bool             `json:"following"`
+	Follower  bool             `json:"follower"`
 }
 
 func Profile(ctx context.Context, req *ProfileRequest) (*ProfileResult, error) {
@@ -57,13 +59,13 @@ func Profile(ctx context.Context, req *ProfileRequest) (*ProfileResult, error) {
 	var r ProfileResult
 	// language=SQL
 	err := pgctx.QueryRow(ctx, `
-		select username,
+		select username, photo,
 		       exists(select 1 from follows where following_id = users.id and user_id = $2),
 		       exists(select 1 from follows where user_id = users.id and following_id = $2)
 		from users
 		where username = $1
 	`, req.Username, userID).Scan(
-		&r.Username, &r.Following, &r.Follower,
+		&r.Username, &r.Photo, &r.Following, &r.Follower,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil

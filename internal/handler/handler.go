@@ -29,7 +29,7 @@ func New() http.Handler {
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
 	mux.Handle("/user/follow", arpc.Handler(user.Follow))
 
-	mux.Handle("/file/", http.StripPrefix("/file", file.Handler()))
+	mux.Handle(file.BasePath+"/", http.StripPrefix(file.BasePath, file.Handler()))
 
 	mux.Handle("/picture/get", arpc.Handler(picture.Get))
 	mux.Handle("/picture/favorite", arpc.Handler(picture.Favorite))

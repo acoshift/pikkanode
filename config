@@ -4,3 +4,4 @@ redis_addr: localhost:6379
 redis_prefix: "pikkanode:"
 storage_bucket: acoshift-dev
 storage_base: pikkanode
+base_url: http://localhost:8080
