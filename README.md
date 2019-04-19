@@ -12,7 +12,7 @@
 
 - [x] Profile
 - [ ] Update profile
-- [ ] Upload profile picture
+- [x] Upload profile picture
 - [ ] Posting new picture
 - [ ] Delete my uploaded picture
 - [ ] Update my picture detail (Can not update image)
