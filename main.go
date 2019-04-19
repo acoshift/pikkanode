@@ -1,7 +1,7 @@
 package main
 
 import (
-	"net/http"
+	"log"
 	"time"
 
 	"github.com/moonrhythm/parapet"
@@ -16,32 +16,35 @@ import (
 )
 
 func main() {
-	h := handler.New()
-
 	svc := parapet.NewBackend()
+	svc.Use(health())
 	if !config.Dev() {
-		svc.Use(health())
 		svc.Use(redirect.HTTPS())
-		svc.Use(cors.CORS{
-			MaxAge:           time.Hour,
-			AllowCredentials: true,
-			AllowHeaders:     []string{"Content-Type"},
-			AllowMethods:     []string{"POST"},
-			AllowOrigins: []string{
-				"http://localhost:8080",
-				"http://localhost:8000",
-				"http://localhost:3000",
-				"http://127.0.0.1:8080",
-				"http://127.0.0.1:8000",
-				"http://127.0.0.1:3000",
-				"http://0.0.0.0:8080",
-				"http://0.0.0.0:8000",
-				"http://0.0.0.0:3000",
-			},
-		})
 	}
+	svc.Use(cors.CORS{
+		MaxAge:           time.Hour,
+		AllowCredentials: true,
+		AllowHeaders:     []string{"Content-Type"},
+		AllowMethods:     []string{"POST"},
+		AllowOrigins: []string{
+			"http://localhost:8080",
+			"http://localhost:8000",
+			"http://localhost:3000",
+			"http://127.0.0.1:8080",
+			"http://127.0.0.1:8000",
+			"http://127.0.0.1:3000",
+			"http://0.0.0.0:8080",
+			"http://0.0.0.0:8000",
+			"http://0.0.0.0:3000",
+		},
+	})
+	svc.Handler = handler.New()
+	svc.Addr = ":8080"
 
-	http.ListenAndServe(":8080", h)
+	err := svc.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func health() parapet.Middleware {
