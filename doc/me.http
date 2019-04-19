@@ -21,9 +21,9 @@ IMAGE_DATA
 
 ###
 
-# Remove Picture
+# Remove Work
 
-POST http://localhost:8080/me/removePicture
+POST http://localhost:8080/me/removeWork
 Content-Type: application/json
 
 {

@@ -11,9 +11,9 @@ import (
 	"github.com/acoshift/pikkanode/internal/config"
 	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/me"
-	"github.com/acoshift/pikkanode/internal/picture"
 	"github.com/acoshift/pikkanode/internal/session"
 	"github.com/acoshift/pikkanode/internal/user"
+	"github.com/acoshift/pikkanode/internal/work"
 )
 
 func New() http.Handler {
@@ -27,14 +27,14 @@ func New() http.Handler {
 
 	mux.Handle("/me/profile", arpc.Handler(me.Profile))
 	mux.Handle("/me/uploadProfilePhoto", arpc.Handler(me.UploadProfilePhoto))
-	mux.Handle("/me/removePicture", arpc.Handler(me.RemovePicture))
+	mux.Handle("/me/removeWork", arpc.Handler(me.RemoveWork))
 
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
 	mux.Handle("/user/follow", arpc.Handler(user.Follow))
 
-	mux.Handle("/picture/get", arpc.Handler(picture.Get))
-	mux.Handle("/picture/favorite", arpc.Handler(picture.Favorite))
-	mux.Handle("/picture/postComment", arpc.Handler(picture.PostComment))
+	mux.Handle("/work/get", arpc.Handler(work.Get))
+	mux.Handle("/work/favorite", arpc.Handler(work.Favorite))
+	mux.Handle("/work/postComment", arpc.Handler(work.PostComment))
 
 	return middleware.Chain(
 		session.Middleware(),

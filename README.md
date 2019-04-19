@@ -12,26 +12,26 @@
 
 - [x] Profile
 - [ ] Update profile
-- [x] Upload profile picture
-- [ ] Posting new picture
-- [ ] Delete my uploaded picture
-- [ ] Update my picture detail (Can not update image)
-- [ ] Get my pictures
-- [ ] Get my favorited pictures
+- [x] Upload profile photo
+- [ ] Posting new works
+- [ ] Delete my uploaded works
+- [ ] Update my work detail (Can not update image)
+- [ ] Get my works
+- [ ] Get my favorited works
 
 ### User
 
 - [x] Get user public profile
-- [ ] Get user public uploaded pictures
+- [ ] Get user public uploaded photo
 - [x] Follow user
 
-### Picture
+### Work
 
-- [x] Get a picture
-- [x] Post a comment to a picture
-- [x] Favorite a picture
-- [x] Un-favorite a picture
+- [x] Get a work
+- [x] Post a comment to a work
+- [x] Favorite a work
+- [x] Un-favorite a work
 
 ### Discovery
 
-- [ ] Get latest pictures
+- [ ] Get latest works

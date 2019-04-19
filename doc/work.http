@@ -1,6 +1,6 @@
-# Get Picture
+# Get WOrk
 
-POST http://localhost:8080/picture/get
+POST http://localhost:8080/work/get
 Content-Type: application/json
 
 {
@@ -9,9 +9,9 @@ Content-Type: application/json
 
 ###
 
-# Favorite Picture
+# Favorite WOrk
 
-POST http://localhost:8080/picture/favorite
+POST http://localhost:8080/work/favorite
 Content-Type: application/json
 
 {
@@ -21,9 +21,9 @@ Content-Type: application/json
 
 ###
 
-# Comment Picture
+# Comment WOrk
 
-POST http://localhost:8080/picture/comment
+POST http://localhost:8080/work/comment
 Content-Type: application/json
 
 {

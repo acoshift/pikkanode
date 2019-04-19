@@ -1,4 +1,4 @@
-package picture
+package work
 
 import (
 	"context"
@@ -56,13 +56,13 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 		err := pgctx.QueryRow(ctx, `
 			select
 				id, name, detail, photo, tags, created_at
-			from pictures
+			from works
 			where id = $1
 		`, req.ID).Scan(
 			&r.ID, &r.Name, &r.Detail, &r.Photo, pq.Array(&r.Tags), &r.CreatedAt,
 		)
 		if err == sql.ErrNoRows {
-			return nil, errPictureNotFound
+			return nil, errWorkNotFound
 		}
 		if err != nil {
 			return nil, err
@@ -77,7 +77,7 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 				u.username, u.photo
 			from comments c
 				left join users u on c.user_id = u.id
-			where c.picture_id = $1
+			where c.work_id = $1
 		`, req.ID)
 		if err != nil {
 			return nil, err
@@ -130,13 +130,13 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 		// language=SQL
 		_, err := pgctx.Exec(ctx, `
 		insert into favorites
-			(user_id, picture_id)
+			(user_id, work_id)
 		values
 			($1, $2)
 		on conflict do nothing
 	`, userID, req.ID)
-		if pgsql.IsForeignKeyViolation(err, "favorites_picture_id_fkey") {
-			return nil, errPictureNotFound
+		if pgsql.IsForeignKeyViolation(err, "favorites_work_id_fkey") {
+			return nil, errWorkNotFound
 		}
 		if err != nil {
 			return nil, err
@@ -144,7 +144,7 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 	} else {
 		// language=SQL
 		_, err := pgctx.Exec(ctx, `
-			delete from favorites where user_id = $1 and picture_id = $2
+			delete from favorites where user_id = $1 and work_id = $2
 		`, userID, req.ID)
 		if err != nil {
 			return nil, err
@@ -178,12 +178,12 @@ func PostComment(ctx context.Context, req *CommentRequest) (*struct{}, error) {
 	// language=SQL
 	_, err := pgctx.Exec(ctx, `
 		insert into comments
-			(user_id, picture_id, content)
+			(user_id, work_id, content)
 		values
 			($1, $2, $3)
 	`, userID, req.ID, req.Content)
-	if pgsql.IsForeignKeyViolation(err, "comments_picture_id_fkey") {
-		return nil, errPictureNotFound
+	if pgsql.IsForeignKeyViolation(err, "comments_work_id_fkey") {
+		return nil, errWorkNotFound
 	}
 	if err != nil {
 		return nil, err

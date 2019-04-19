@@ -1,4 +1,4 @@
-package picture
+package work
 
 import (
 	"net/http"
@@ -8,5 +8,5 @@ import (
 
 var (
 	errInvalidCredentials = arpc.NewError(http.StatusUnauthorized, "invalid credentials")
-	errPictureNotFound    = arpc.NewError(http.StatusBadRequest, "picture not found")
+	errWorkNotFound       = arpc.NewError(http.StatusBadRequest, "work not found")
 )
