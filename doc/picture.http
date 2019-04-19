@@ -30,3 +30,15 @@ Content-Type: application/json
 }
 
 ###
+
+# Comment Picture
+
+POST http://localhost:8080/picture/comment
+Content-Type: application/json
+
+{
+  "id": "1",
+  "content": "awesome!"
+}
+
+###
