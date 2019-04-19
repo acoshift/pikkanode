@@ -1,10 +1,12 @@
 package config
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"time"
 
+	"cloud.google.com/go/storage"
 	"github.com/acoshift/configfile"
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
@@ -17,12 +19,15 @@ func String(name string) string {
 }
 
 var (
-	redisClient *redis.Client
-	db          *sql.DB
+	redisClient   *redis.Client
+	db            *sql.DB
+	storageClient *storage.Client
 )
 
 func init() {
 	var err error
+
+	ctx := context.Background()
 
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:        String("redis_addr"),
@@ -32,6 +37,9 @@ func init() {
 	})
 
 	db, err = sql.Open("postgres", String("db_dsn"))
+	must(err)
+
+	storageClient, err = storage.NewClient(ctx)
 	must(err)
 }
 
@@ -51,6 +59,10 @@ func RedisPrefix() string {
 
 func DB() *sql.DB {
 	return db
+}
+
+func StorageClient() *storage.Client {
+	return storageClient
 }
 
 func Dev() bool {

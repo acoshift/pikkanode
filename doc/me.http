@@ -4,3 +4,19 @@ GET http://localhost:8080/me/profile
 Cookie: {{auth_cookie}}
 
 ###
+
+# Upload profile photo
+
+POST http://localhost:8080/me/uploadProfilePhoto
+Content-Type: multipart/form-data; boundary=----b
+Cookie: {{auth_cookie}}
+
+------b
+Content-Disposition: form-data; name="photo"
+Content-Type: image/jpg
+Content-Length: 10
+
+IMAGE_DATA
+------b--
+
+###

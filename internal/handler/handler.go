@@ -9,6 +9,7 @@ import (
 
 	"github.com/acoshift/pikkanode/internal/auth"
 	"github.com/acoshift/pikkanode/internal/config"
+	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/me"
 	"github.com/acoshift/pikkanode/internal/session"
 	"github.com/acoshift/pikkanode/internal/user"
@@ -22,8 +23,11 @@ func New() http.Handler {
 	mux.Handle("/auth/signOut", arpc.Handler(auth.SignOut))
 
 	mux.Handle("/me/profile", arpc.Handler(me.Profile))
+	mux.Handle("/me/uploadProfilePhoto", arpc.Handler(me.UploadProfilePhoto))
 
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
+
+	mux.Handle("/file/", http.StripPrefix("/file", file.Handler()))
 
 	return middleware.Chain(
 		session.Middleware(),
