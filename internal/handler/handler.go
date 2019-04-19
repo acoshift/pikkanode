@@ -9,6 +9,7 @@ import (
 
 	"github.com/acoshift/pikkanode/internal/auth"
 	"github.com/acoshift/pikkanode/internal/config"
+	"github.com/acoshift/pikkanode/internal/discovery"
 	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/me"
 	"github.com/acoshift/pikkanode/internal/session"
@@ -40,6 +41,7 @@ func New() http.Handler {
 	mux.Handle("/work/favorite", arpc.Handler(work.Favorite))
 	mux.Handle("/work/postComment", arpc.Handler(work.PostComment))
 
+	mux.Handle("/discovery/getWorks", arpc.Handler(discovery.GetWorks))
 	return middleware.Chain(
 		session.Middleware(),
 		pgctx.Middleware(config.DB()),

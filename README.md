@@ -34,4 +34,4 @@
 
 ### Discovery
 
-- [ ] Get latest works
+- [x] Get latest works

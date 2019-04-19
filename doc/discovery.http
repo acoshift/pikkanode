@@ -1,0 +1,13 @@
+# Get Works
+
+POST http://localhost:8080/discovery/getWorks
+Content-Type: application/json
+
+{
+  "paginate": {
+    "page": 1,
+    "perPage": 20
+  }
+}
+
+###
