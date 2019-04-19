@@ -1,0 +1,8 @@
+.DS_Store
+.goreload
+.idea
+.vscode
+*.tmp
+*.log
+/config
+.goreload

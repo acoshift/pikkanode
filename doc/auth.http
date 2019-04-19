@@ -1,0 +1,35 @@
+# Sign Up
+
+POST http://localhost:8080/auth/signUp
+Content-Type: application/json
+
+{
+    "username": "tester",
+    "password": "123456"
+}
+
+###
+
+# Sign In
+
+POST http://localhost:8080/auth/signIn
+Content-Type: application/json
+
+{
+	"username": "tester",
+	"password": "123456"
+}
+
+> {% client.global.set("auth_cookie", response.headers.valueOf('Set-Cookie').match(/(s=)([^;]*)/g)[0]) %}
+
+###
+
+# Sign Out
+
+POST http://localhost:8080/auth/signOut
+Content-Type: application/json
+Cookie: {{auth_cookie}}
+
+{}
+
+###

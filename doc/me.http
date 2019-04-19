@@ -1,0 +1,6 @@
+# Profile
+
+GET http://localhost:8080/me/profile
+Cookie: {{auth_cookie}}
+
+###

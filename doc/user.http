@@ -1,0 +1,6 @@
+# Profile
+
+GET http://localhost:8080/user/profile?username=tester
+Cookie: {{auth_cookie}}
+
+###
