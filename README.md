@@ -17,7 +17,7 @@
 - [x] Delete my uploaded works
 - [ ] Update my work detail (Can not update image)
 - [x] Get my works
-- [ ] Get my favorited works
+- [x] Get my favorited works
 
 ### User
 

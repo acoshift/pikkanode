@@ -45,3 +45,17 @@ Content-Type: application/json
 }
 
 ###
+
+# Get My Favorite Works
+
+POST http://localhost:8080/me/getMyFavoriteWorks
+Content-Type: application/json
+
+{
+  "paginate": {
+    "page": 1,
+    "perPage": 20
+  }
+}
+
+###

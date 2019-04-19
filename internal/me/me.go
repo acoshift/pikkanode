@@ -232,3 +232,71 @@ func GetMyWorks(ctx context.Context, req *GetMyWorksRequest) (*GetMyWorksResult,
 
 	return &r, nil
 }
+
+type GetMyFavoriteWorksRequest struct {
+	Paginate paginate.Paginate `json:"paginate"`
+}
+
+type GetMyFavoriteWorksResult struct {
+	List     []*MyWorkItem     `json:"list"`
+	Paginate paginate.Paginate `json:"paginate"`
+}
+
+func GetMyFavoriteWorks(ctx context.Context, req *GetMyFavoriteWorksRequest) (*GetMyFavoriteWorksResult, error) {
+	userID := session.GetUserID(ctx)
+	if userID == "" {
+		return nil, errInvalidCredentials
+	}
+
+	var r GetMyFavoriteWorksResult
+	{
+		err := req.Paginate.CountFrom(func() (cnt int64, err error) {
+			// language=SQL
+			err = pgctx.QueryRow(ctx, `
+				select count(*) from favorites where user_id = $1
+			`, userID).Scan(&cnt)
+			return
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	{
+		// language=SQL
+		rows, err := pgctx.Query(ctx, `
+			select
+				w.id, w.name, w.detail, w.photo, w.tags, w.created_at
+			from favorites f
+				left join works w on f.work_id = w.id
+			where f.user_id = $3
+			offset $1 limit $2
+		`, req.Paginate.Offset(), req.Paginate.Limit(), userID)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+
+		r.List = make([]*MyWorkItem, 0)
+		r.Paginate = req.Paginate
+
+		for rows.Next() {
+			var x MyWorkItem
+			err := rows.Scan(
+				&x.ID, &x.Name, &x.Detail, &x.Photo, pq.Array(&x.Tags), &x.CreatedAt,
+			)
+			if err != nil {
+				return nil, err
+			}
+			r.List = append(r.List, &x)
+		}
+
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
+
+		rows.Close()
+	}
+
+	return &r, nil
+}

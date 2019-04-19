@@ -1,4 +1,4 @@
-# Get WOrk
+# Get Work
 
 POST http://localhost:8080/work/get
 Content-Type: application/json
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ###
 
-# Favorite WOrk
+# Favorite Work
 
 POST http://localhost:8080/work/favorite
 Content-Type: application/json
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ###
 
-# Comment WOrk
+# Comment Work
 
 POST http://localhost:8080/work/comment
 Content-Type: application/json
