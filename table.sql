@@ -34,7 +34,7 @@ create table favorites (
 );
 
 create table comments (
-    id         uuid,
+    id         uuid               default gen_random_uuid(),
     picture_id bigint    not null,
     user_id    uuid      not null,
     content    varchar   not null,
