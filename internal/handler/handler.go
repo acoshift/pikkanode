@@ -30,6 +30,7 @@ func New() http.Handler {
 	mux.Handle("/me/removeWork", arpc.Handler(me.RemoveWork))
 	mux.Handle("/me/getMyWorks", arpc.Handler(me.GetMyWorks))
 	mux.Handle("/me/getMyFavoriteWorks", arpc.Handler(me.GetMyFavoriteWorks))
+	mux.Handle("/me/createWork", arpc.Handler(me.CreateWork))
 
 	mux.Handle("/user/profile", arpc.Handler(user.Profile))
 	mux.Handle("/user/follow", arpc.Handler(user.Follow))

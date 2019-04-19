@@ -25,6 +25,7 @@ IMAGE_DATA
 
 POST http://localhost:8080/me/removeWork
 Content-Type: application/json
+Cookie: {{auth_cookie}}
 
 {
   "id": "1"
@@ -36,6 +37,7 @@ Content-Type: application/json
 
 POST http://localhost:8080/me/getMyWorks
 Content-Type: application/json
+Cookie: {{auth_cookie}}
 
 {
   "paginate": {
@@ -50,6 +52,7 @@ Content-Type: application/json
 
 POST http://localhost:8080/me/getMyFavoriteWorks
 Content-Type: application/json
+Cookie: {{auth_cookie}}
 
 {
   "paginate": {
@@ -57,5 +60,21 @@ Content-Type: application/json
     "perPage": 20
   }
 }
+
+###
+
+# Create Work
+
+POST http://localhost:8080/me/createWork
+Content-Type: multipart/form-data; boundary=----b
+Cookie: {{auth_cookie}}
+
+------b
+Content-Disposition: form-data; name="photo"
+Content-Type: image/jpg
+Content-Length: 10
+
+IMAGE_DATA
+------b--
 
 ###

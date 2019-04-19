@@ -13,7 +13,7 @@
 - [x] Profile
 - [ ] Update profile
 - [x] Upload profile photo
-- [ ] Posting new works
+- [x] Posting new works
 - [x] Delete my uploaded works
 - [ ] Update my work detail (Can not update image)
 - [x] Get my works
