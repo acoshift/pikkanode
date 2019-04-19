@@ -7,5 +7,6 @@ import (
 )
 
 var (
-	errPictureNotFound = arpc.NewError(http.StatusBadRequest, "picture not found")
+	errInvalidCredentials = arpc.NewError(http.StatusUnauthorized, "invalid credentials")
+	errPictureNotFound    = arpc.NewError(http.StatusBadRequest, "picture not found")
 )

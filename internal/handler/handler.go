@@ -32,6 +32,7 @@ func New() http.Handler {
 	mux.Handle("/file/", http.StripPrefix("/file", file.Handler()))
 
 	mux.Handle("/picture/get", arpc.Handler(picture.Get))
+	mux.Handle("/picture/favorite", arpc.Handler(picture.Favorite))
 	return middleware.Chain(
 		session.Middleware(),
 		pgctx.Middleware(config.DB()),
