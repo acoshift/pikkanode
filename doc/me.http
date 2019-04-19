@@ -31,3 +31,17 @@ Content-Type: application/json
 }
 
 ###
+
+# Get My Works
+
+POST http://localhost:8080/me/getMyWorks
+Content-Type: application/json
+
+{
+  "paginate": {
+    "page": 1,
+    "perPage": 20
+  }
+}
+
+###

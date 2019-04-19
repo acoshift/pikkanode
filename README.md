@@ -14,9 +14,9 @@
 - [ ] Update profile
 - [x] Upload profile photo
 - [ ] Posting new works
-- [ ] Delete my uploaded works
+- [x] Delete my uploaded works
 - [ ] Update my work detail (Can not update image)
-- [ ] Get my works
+- [x] Get my works
 - [ ] Get my favorited works
 
 ### User

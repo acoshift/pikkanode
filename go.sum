@@ -35,6 +35,8 @@ github.com/acoshift/hrpc v0.0.0-20190419060131-c019e52d9cd3 h1:Ifa5/MpRSaAhBbMOL
 github.com/acoshift/hrpc v0.0.0-20190419060131-c019e52d9cd3/go.mod h1:a9oJO82EU2OZHYSa9poO16JvMHcyytLQqUcXsVb1yTU=
 github.com/acoshift/middleware v0.4.1 h1:Fjz10OMNt7OxHA/YGT85iHELc3lxQzl7L57vrb6Q8Bw=
 github.com/acoshift/middleware v0.4.1/go.mod h1:Q2Jna8z8qw97nuR0iemEWK7G7S3SaNufh/YMIyb3QeQ=
+github.com/acoshift/paginate v1.1.1 h1:A/9oHcCg0twmTQ0VRqjpvNd2poZAyrn/3w4TBJGCg3Y=
+github.com/acoshift/paginate v1.1.1/go.mod h1:CKlkxtRIhhHKGDwl2kwV3HJ98W4tnZY1oFtcyxn1PRw=
 github.com/acoshift/pgsql v0.3.2 h1:y560pRRsHdYCU6Iq8OM3Z0dyRopckLXVLErKDQr00sc=
 github.com/acoshift/pgsql v0.3.2/go.mod h1:ToFVzOL+LqW1UtHhSu2pABugEX07+3b2gFwe45TePIE=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
