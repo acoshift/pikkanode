@@ -107,3 +107,40 @@ func Favorite(ctx context.Context, req *FavoriteRequest) (*struct{}, error) {
 
 	return &r, nil
 }
+
+type UnFavoriteRequest struct {
+	ID string `json:"id"`
+}
+
+func (req *UnFavoriteRequest) Valid() error {
+	v := validator.New()
+	v.Must(req.ID != "", "id required")
+	if req.ID != "" {
+		id, err := strconv.ParseInt(req.ID, 10, 64)
+		if err != nil {
+			v.Add(errors.New("invalid id"))
+		} else {
+			v.Must(id > 0, "id required")
+		}
+	}
+
+	return v.Error()
+}
+
+func UnFavorite(ctx context.Context, req *UnFavoriteRequest) (*struct{}, error) {
+	userID := session.GetUserID(ctx)
+	if userID == "" {
+		return nil, errInvalidCredentials
+	}
+
+	var r struct{}
+	// language=SQL
+	_, err := pgctx.Exec(ctx, `
+		delete from favorites where user_id = $1 and picture_id = $2
+	`, userID, req.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
