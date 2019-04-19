@@ -11,6 +11,7 @@ import (
 	"github.com/acoshift/pikkanode/internal/config"
 	"github.com/acoshift/pikkanode/internal/file"
 	"github.com/acoshift/pikkanode/internal/me"
+	"github.com/acoshift/pikkanode/internal/picture"
 	"github.com/acoshift/pikkanode/internal/session"
 	"github.com/acoshift/pikkanode/internal/user"
 )
@@ -30,6 +31,7 @@ func New() http.Handler {
 
 	mux.Handle("/file/", http.StripPrefix("/file", file.Handler()))
 
+	mux.Handle("/picture/get", arpc.Handler(picture.Get))
 	return middleware.Chain(
 		session.Middleware(),
 		pgctx.Middleware(config.DB()),
