@@ -42,7 +42,7 @@ type CommentItem struct {
 	User      struct {
 		Username string `json:"username"`
 		Photo    string `json:"photo"`
-	}
+	} `json:"user"`
 }
 
 type GetResult struct {

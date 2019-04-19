@@ -27,10 +27,10 @@
 
 ### Picture
 
-- [ ] Get a picture
-- [ ] Post a comment to a picture
-- [ ] Favorite a picture
-- [ ] Un-favorite a picture
+- [x] Get a picture
+- [x] Post a comment to a picture
+- [x] Favorite a picture
+- [x] Un-favorite a picture
 
 ### Discovery
 
