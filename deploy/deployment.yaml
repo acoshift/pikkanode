@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pikkanode
+  labels:
+    app: pikkanode
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: pikkanode
+  template:
+    metadata:
+      labels:
+        app: pikkanode
+    spec:
+      containers:
+      - name: pikkanode
+        image: gcr.io/project/pikkanode
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/app/service_account.json
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /healthz
+          periodSeconds: 15
+          failureThreshold: 3
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /healthz?ready=1
+          periodSeconds: 10
+          failureThreshold: 2
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+        - mountPath: /etc/app
+          name: secret
+      volumes:
+      - name: config
+        configMap:
+          name: pikkanode
+      - name: secret
+        secret:
+          secretName: app
+

@@ -6,6 +6,9 @@ import (
 
 	"github.com/moonrhythm/parapet"
 	"github.com/moonrhythm/parapet/pkg/cors"
+	"github.com/moonrhythm/parapet/pkg/healthz"
+	"github.com/moonrhythm/parapet/pkg/host"
+	"github.com/moonrhythm/parapet/pkg/location"
 	"github.com/moonrhythm/parapet/pkg/redirect"
 
 	"github.com/acoshift/pikkanode/internal/config"
@@ -17,6 +20,7 @@ func main() {
 
 	svc := parapet.NewBackend()
 	if !config.Dev() {
+		svc.Use(health())
 		svc.Use(redirect.HTTPS())
 		svc.Use(cors.CORS{
 			MaxAge:           time.Hour,
@@ -38,4 +42,12 @@ func main() {
 	}
 
 	http.ListenAndServe(":8080", h)
+}
+
+func health() parapet.Middleware {
+	h := host.NewCIDR("0.0.0.0/0")
+	l := location.Exact("/healthz")
+	l.Use(healthz.New())
+	h.Use(l)
+	return h
 }
