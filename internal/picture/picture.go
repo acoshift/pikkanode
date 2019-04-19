@@ -4,8 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"net/http"
-	"net/url"
 	"strconv"
 	"time"
 
@@ -21,28 +19,16 @@ type GetRequest struct {
 	ID string `json:"id"`
 }
 
-func (*GetRequest) AdaptRequest(r *http.Request) {
-	if r.Method == http.MethodGet {
-		r.ParseForm()
-		r.Method = http.MethodPost
-		r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		r.PostForm = r.Form
-	}
-}
-
-func (req *GetRequest) UnmarshalForm(v url.Values) error {
-	req.ID = v.Get("id")
-	return nil
-}
-
 func (req *GetRequest) Valid() error {
 	v := validator.New()
 	v.Must(req.ID != "", "id required")
-	id, err := strconv.ParseInt(req.ID, 10, 64)
-	if err != nil {
-		v.Add(errors.New("invalid id"))
-	} else {
-		v.Must(id > 0, "id required")
+	if req.ID != "" {
+		id, err := strconv.ParseInt(req.ID, 10, 64)
+		if err != nil {
+			v.Add(errors.New("invalid id"))
+		} else {
+			v.Must(id > 0, "id required")
+		}
 	}
 
 	return v.Error()
