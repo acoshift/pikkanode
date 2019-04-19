@@ -34,10 +34,10 @@ create table favorites (
 );
 
 create table comments (
-    id uuid,
-    picture_id bigint not null,
-    user_id uuid not null,
-    content varchar not null,
+    id         uuid,
+    picture_id bigint    not null,
+    user_id    uuid      not null,
+    content    varchar   not null,
     created_at timestamp not null default now(),
     primary key (id),
     foreign key (picture_id) references pictures (id) on delete cascade,
@@ -46,9 +46,9 @@ create table comments (
 create index on comments (picture_id, created_at desc);
 
 create table follows (
-    user_id uuid,
+    user_id      uuid,
     following_id uuid,
-    created_at timestamp not null default now(),
+    created_at   timestamp not null default now(),
     primary key (user_id, following_id),
     foreign key (user_id) references users (id) on delete cascade,
     foreign key (following_id) references users (id) on delete cascade
