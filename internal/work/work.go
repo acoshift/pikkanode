@@ -44,6 +44,7 @@ type GetResult struct {
 	Detail    string           `json:"detail"`
 	Photo     file.DownloadURL `json:"photo"`
 	Tags      []string         `json:"tags"`
+	Username  string           `json:"username"`
 	Comments  []*CommentItem   `json:"comments"`
 	CreatedAt time.Time        `json:"createdAt"`
 }
@@ -55,11 +56,14 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 		// language=SQL
 		err := pgctx.QueryRow(ctx, `
 			select
-				id, name, detail, photo, tags, created_at
-			from works
-			where id = $1
+				w.id, w.name, w.detail, w.photo, w.tags, w.created_at,
+				u.username
+			from works w
+				left join users u on w.user_id = u.id
+			where w.id = $1
 		`, req.ID).Scan(
 			&r.ID, &r.Name, &r.Detail, &r.Photo, pq.Array(&r.Tags), &r.CreatedAt,
+			&r.Username,
 		)
 		if err == sql.ErrNoRows {
 			return nil, errWorkNotFound
