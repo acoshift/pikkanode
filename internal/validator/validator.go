@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"net/http"
 	"regexp"
 
 	"github.com/acoshift/arpc"
@@ -17,11 +16,7 @@ func New() *Validator {
 }
 
 func (v *Validator) Error() error {
-	err := v.Validator.Error()
-	if err != nil {
-		return arpc.NewError(http.StatusBadRequest, err.Error())
-	}
-	return nil
+	return arpc.WrapError(v.Validator.Error())
 }
 
 var rxTag = regexp.MustCompile(`^[\w\-]+$`)

@@ -16,8 +16,8 @@ import (
 )
 
 var (
-	errUserNotFound = arpc.NewError(http.StatusBadRequest, "user not found")
-	errFollowSelf   = arpc.NewError(http.StatusBadRequest, "can not follow self")
+	errUserNotFound = arpc.NewError("user not found")
+	errFollowSelf   = arpc.NewError("can not follow self")
 )
 
 type ProfileRequest struct {

@@ -5,7 +5,6 @@ import (
 	"io"
 	"mime"
 	"mime/multipart"
-	"net/http"
 
 	"github.com/acoshift/arpc"
 	"github.com/disintegration/imaging"
@@ -13,8 +12,8 @@ import (
 )
 
 var (
-	ErrInvalidType = arpc.NewError(http.StatusBadRequest, "invalid image type")
-	ErrTooLarge    = arpc.NewError(http.StatusBadRequest, "image too large")
+	ErrInvalidType = arpc.NewError("invalid image type")
+	ErrTooLarge    = arpc.NewError("image too large")
 )
 
 var contentTypeExt = map[string]string{

@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.35.1
-	github.com/acoshift/arpc v0.0.0-20190419123127-43e6c00c80e7
+	github.com/acoshift/arpc v0.0.0-20190420143323-f2283f72dc07
 	github.com/acoshift/configfile v1.4.0
 	github.com/acoshift/header v0.0.0-20181002150212-5f10ae681f7e // indirect
 	github.com/acoshift/middleware v0.4.1
@@ -18,7 +18,6 @@ require (
 	github.com/moonrhythm/parapet v0.6.0
 	github.com/moonrhythm/session v0.13.0
 	github.com/moonrhythm/validator v1.1.1
-	github.com/stretchr/objx v0.2.0 // indirect
 	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	golang.org/x/image v0.0.0-20190227222117-0694c2d4d067 // indirect
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a // indirect

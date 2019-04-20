@@ -1,12 +1,10 @@
 package me
 
 import (
-	"net/http"
-
 	"github.com/acoshift/arpc"
 )
 
 var (
-	errInvalidCredentials = arpc.NewError(http.StatusUnauthorized, "invalid credentials")
-	errWorkNotFound       = arpc.NewError(http.StatusBadRequest, "work not found")
+	errInvalidCredentials = arpc.NewError("invalid credentials")
+	errWorkNotFound       = arpc.NewError("work not found")
 )
