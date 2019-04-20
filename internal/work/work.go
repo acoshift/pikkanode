@@ -39,17 +39,19 @@ type CommentItem struct {
 }
 
 type GetResult struct {
-	ID        string           `json:"id"`
-	Name      string           `json:"name"`
-	Detail    string           `json:"detail"`
-	Photo     file.DownloadURL `json:"photo"`
-	Tags      []string         `json:"tags"`
-	Username  string           `json:"username"`
-	Comments  []*CommentItem   `json:"comments"`
-	CreatedAt time.Time        `json:"createdAt"`
+	ID         string           `json:"id"`
+	Name       string           `json:"name"`
+	Detail     string           `json:"detail"`
+	Photo      file.DownloadURL `json:"photo"`
+	Tags       []string         `json:"tags"`
+	Username   string           `json:"username"`
+	Comments   []*CommentItem   `json:"comments"`
+	IsFavorite bool             `json:"isFavorite"`
+	CreatedAt  time.Time        `json:"createdAt"`
 }
 
 func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
+	userID := session.GetUserID(ctx)
 	var r GetResult
 
 	{
@@ -57,13 +59,16 @@ func Get(ctx context.Context, req *GetRequest) (*GetResult, error) {
 		err := pgctx.QueryRow(ctx, `
 			select
 				w.id, w.name, w.detail, w.photo, w.tags, w.created_at,
-				u.username
+				u.username,
+				f.work_id is not null as is_favorite
 			from works w
 				left join users u on w.user_id = u.id
+				left join favorites f on w.id = f.work_id and ($2 != '' and f.user_id = $2::uuid)
 			where w.id = $1
-		`, req.ID).Scan(
+		`, req.ID, userID).Scan(
 			&r.ID, &r.Name, &r.Detail, &r.Photo, pq.Array(&r.Tags), &r.CreatedAt,
 			&r.Username,
+			&r.IsFavorite,
 		)
 		if err == sql.ErrNoRows {
 			return nil, errWorkNotFound
