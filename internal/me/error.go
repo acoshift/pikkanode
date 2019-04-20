@@ -6,5 +6,5 @@ import (
 
 var (
 	errInvalidCredentials = arpc.NewError("invalid credentials")
-	errWorkNotFound       = arpc.NewError("work not found")
+	errWorkNotFound       = arpc.NewError("photo not found")
 )
