@@ -297,10 +297,10 @@ func CreateWork(ctx context.Context, req *CreateWorkRequest) (*CreateWorkResult,
 }
 
 type UpdateWorkRequest struct {
-	ID     string
-	Name   string
-	Detail string
-	Tags   []string
+	ID     string   `json:"id"`
+	Name   string   `json:"name"`
+	Detail string   `json:"detail"`
+	Tags   []string `json:"tags"`
 }
 
 func (req *UpdateWorkRequest) Valid() error {
