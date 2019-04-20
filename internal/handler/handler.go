@@ -25,6 +25,7 @@ func New() http.Handler {
 	mux.Handle("/auth/signUp", arpc.Handler(auth.SignUp))
 	mux.Handle("/auth/signIn", arpc.Handler(auth.SignIn))
 	mux.Handle("/auth/signOut", arpc.Handler(auth.SignOut))
+	mux.Handle("/auth/check", arpc.Handler(auth.Check))
 
 	mux.Handle("/me/profile", arpc.Handler(me.Profile))
 	mux.Handle("/me/uploadProfilePhoto", arpc.Handler(me.UploadProfilePhoto))

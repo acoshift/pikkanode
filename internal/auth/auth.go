@@ -2,7 +2,10 @@ package auth
 
 import (
 	"context"
+	"io/ioutil"
+	"net/http"
 	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/acoshift/pikkanode/internal/password"
@@ -82,4 +85,26 @@ func SignIn(ctx context.Context, req *SignInRequest) (*struct{}, error) {
 func SignOut(ctx context.Context, _ *struct{}) (*struct{}, error) {
 	session.Get(ctx).Destroy()
 	return new(struct{}), nil
+}
+
+type CheckRequest struct{}
+
+func (*CheckRequest) AdaptRequest(r *http.Request) {
+	if r.Method == http.MethodGet {
+		r.Method = http.MethodPost
+		r.Header.Set("Content-Type", "application/json")
+		r.Body = ioutil.NopCloser(strings.NewReader("{}"))
+	}
+}
+
+type CheckResult struct {
+	OK bool `json:"ok"`
+}
+
+func Check(ctx context.Context, _ *CheckRequest) (*CheckResult, error) {
+	userID := session.GetUserID(ctx)
+
+	ok := userID != ""
+
+	return &CheckResult{OK: ok}, nil
 }
