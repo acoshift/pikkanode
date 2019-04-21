@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"cloud.google.com/go/profiler"
 	"cloud.google.com/go/storage"
 	"github.com/acoshift/configfile"
 	"github.com/go-redis/redis"
@@ -41,6 +42,12 @@ func init() {
 
 	storageClient, err = storage.NewClient(ctx)
 	must(err)
+
+	if config.Bool("profiling") {
+		profiler.Start(profiler.Config{
+			Service: "pikkanode",
+		})
+	}
 }
 
 func must(err error) {

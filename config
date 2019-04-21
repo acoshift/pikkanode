@@ -5,3 +5,4 @@ redis_prefix: "pikkanode:"
 storage_bucket: acoshift-dev
 storage_base: pikkanode
 base_url: http://localhost:8080
+profiling: false
