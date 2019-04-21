@@ -1,6 +1,6 @@
 # Sign Up
 
-POST http://localhost:8080/auth/signUp
+POST {{baseUrl}}/auth/signUp
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 # Sign In
 
-POST http://localhost:8080/auth/signIn
+POST {{baseUrl}}/auth/signIn
 Content-Type: application/json
 
 {
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 # Sign Out
 
-POST http://localhost:8080/auth/signOut
+POST {{baseUrl}}/auth/signOut
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 
@@ -36,7 +36,7 @@ Cookie: {{auth_cookie}}
 
 # Check
 
-POST http://localhost:8080/auth/check
+POST {{baseUrl}}/auth/check
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 

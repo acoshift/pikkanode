@@ -1,6 +1,6 @@
 # Get Works
 
-POST http://localhost:8080/discovery/getWorks
+POST {{baseUrl}}/discovery/getWorks
 Content-Type: application/json
 
 {

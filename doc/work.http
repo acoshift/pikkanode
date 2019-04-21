@@ -1,6 +1,6 @@
 # Get Work
 
-POST http://localhost:8080/work/get
+POST {{baseUrl}}/work/get
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 # Favorite Work
 
-POST http://localhost:8080/work/favorite
+POST {{baseUrl}}/work/favorite
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 # Comment Work
 
-POST http://localhost:8080/work/comment
+POST {{baseUrl}}/work/comment
 Content-Type: application/json
 
 {

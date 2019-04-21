@@ -1,13 +1,13 @@
 # Profile
 
-GET http://localhost:8080/me/profile
+GET {{baseUrl}}/me/profile
 Cookie: {{auth_cookie}}
 
 ###
 
 # Upload profile photo
 
-POST http://localhost:8080/me/uploadProfilePhoto
+POST {{baseUrl}}/me/uploadProfilePhoto
 Content-Type: multipart/form-data; boundary=----b
 Cookie: {{auth_cookie}}
 
@@ -23,7 +23,7 @@ IMAGE_DATA
 
 # Remove Work
 
-POST http://localhost:8080/me/removeWork
+POST {{baseUrl}}/me/removeWork
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 
@@ -35,7 +35,7 @@ Cookie: {{auth_cookie}}
 
 # Get My Works
 
-POST http://localhost:8080/me/getMyWorks
+POST {{baseUrl}}/me/getMyWorks
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 
@@ -50,7 +50,7 @@ Cookie: {{auth_cookie}}
 
 # Get My Favorite Works
 
-POST http://localhost:8080/me/getMyFavoriteWorks
+POST {{baseUrl}}/me/getMyFavoriteWorks
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 
@@ -65,10 +65,22 @@ Cookie: {{auth_cookie}}
 
 # Create Work
 
-POST http://localhost:8080/me/createWork
+POST {{baseUrl}}/me/createWork
 Content-Type: multipart/form-data; boundary=----b
 Cookie: {{auth_cookie}}
 
+------b
+Content-Disposition: form-data; name="name"
+
+image-name
+------b
+Content-Disposition: form-data; name="detail"
+
+image detail
+------b
+Content-Disposition: form-data; name="tags"
+
+image_tag
 ------b
 Content-Disposition: form-data; name="photo"
 Content-Type: image/jpg
@@ -81,7 +93,7 @@ IMAGE_DATA
 
 # Update Work
 
-POST http://localhost:8080/me/updateWork
+POST {{baseUrl}}/me/updateWork
 Content-Type: application/json
 Cookie: {{auth_cookie}}
 
