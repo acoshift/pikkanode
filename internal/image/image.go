@@ -86,3 +86,20 @@ func Profile(ctx context.Context, w io.Writer, r io.Reader, ext string) error {
 	img = imaging.Fill(img, 250, 250, imaging.Center, imaging.Lanczos)
 	return imaging.Encode(w, img, ft)
 }
+
+func Sanitize(ctx context.Context, w io.Writer, r io.Reader, ext string) error {
+	ft, err := imaging.FormatFromExtension(ext)
+	if err != nil {
+		return ErrInvalidType
+	}
+
+	sem.Acquire(ctx, 1)
+	defer sem.Release(1)
+
+	img, err := imaging.Decode(r)
+	if err != nil {
+		return err
+	}
+
+	return imaging.Encode(w, img, ft)
+}

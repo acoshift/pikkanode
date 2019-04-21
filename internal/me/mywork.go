@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"strconv"
+	"strings"
 	"time"
 	"unicode/utf8"
 
@@ -213,6 +214,9 @@ func (req *CreateWorkRequest) UnmarshalMultipartForm(v *multipart.Form) error {
 		req.Detail = p[0]
 	}
 	req.Tags = v.Value["tags"]
+	for i := range req.Tags {
+		req.Tags[i] = strings.TrimSpace(req.Tags[i])
+	}
 
 	fp := v.File["photo"]
 	if len(fp) == 1 {
@@ -259,7 +263,7 @@ func CreateWork(ctx context.Context, req *CreateWorkRequest) (*CreateWorkResult,
 	defer fp.Close()
 
 	var buf bytes.Buffer
-	err = image.Profile(ctx, &buf, fp, ext)
+	err = image.Sanitize(ctx, &buf, fp, ext)
 	if err != nil {
 		return nil, err
 	}
